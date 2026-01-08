@@ -1,0 +1,28 @@
+q1.What does count_frequency do?
+=>the defined function count_frequency creates a dictionry consisting all the numbers provided in their list along with their frequencies i.e. the no. of times these numbers were repeated in the list.It creates a dictionary where keys are items from the list and values are the number of times each item appears.
+
+q2.Why is if item in freq needed?
+=>freq[item] += 1 ONLY works if freq[item] already exists.
+If it doesn’t exist, Python throws a KeyError
+So the if check is needed to decide whether to increment an existing count or initialize it to 1
+
+q3.What would break if that if was removed?
+=>On the first occurrence of any item
+Python tries: freq[item] += 1
+But freq[item] does not exist yet so python raises a KeyError.
+Program crashes immediately and no frequencies are calculated at all.
+
+q4.One mistake you might make if writing it again
+=>getting confused between freq[item] or item[freq]
+
+q5.def add(a,b):
+     return a+b
+_____________________
+Q1 What are features (X)?
+=> Features (X) are the input variables (columns) that the model uses to make predictions.
+What is the target (y)?
+=>Target (y) is the output variable (column) that we want the model to predict. 
+Why do we split data into train and test?
+=> We split data so that the model is evaluated on unseen data, which helps us measure how well it generalizes, not just how well it memorizes. the ratio of train:test is usually 80:20 or 70:30
+What could go wrong if we train and test on the same data? 
+=>The model may overfit — it appears to perform well on training data but fails on unseen data.
