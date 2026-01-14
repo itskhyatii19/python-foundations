@@ -1,20 +1,55 @@
-q1.What does count_frequency do?
-=>the defined function count_frequency creates a dictionry consisting all the numbers provided in their list along with their frequencies i.e. the no. of times these numbers were repeated in the list.It creates a dictionary where keys are items from the list and values are the number of times each item appears.
+# Daily ML & Python Revision Notes  
+Author: Khyati Sharma  
 
-q2.Why is if item in freq needed?
-=>freq[item] += 1 ONLY works if freq[item] already exists.
-If it doesn’t exist, Python throws a KeyError
-So the if check is needed to decide whether to increment an existing count or initialize it to 1
+This file contains conceptual questions for reinforcement to strengthen fundamentals.
 
-q3.What would break if that if was removed?
-=>On the first occurrence of any item
-Python tries: freq[item] += 1
-But freq[item] does not exist yet so python raises a KeyError.
-Program crashes immediately and no frequencies are calculated at all.
+---
+Q1. What is the difference between Class and Object.Give one real-life example.
+=>Class: A blueprint or template.Defines what an object will have (variables + methods).
+  Object: A real instance created from the class.It uses the class structure.
+Example: Class → Car;Object → myCar, yourCar
+Q2️.Why do we use super() in child classes?What problem does it solve?
+=>super() is used to:
+• Call the parent class constructor
+• Reuse parent code
+• Avoid rewriting same logic
+Without super():
+• Parent variables won’t initialize
+• Code duplication happens
+Q3. Why should private variables (__balance) NOT be accessed directly?What could go wrong if we allow it?
+=>Private variables:
+• Protect sensitive data
+• Prevent accidental changes
+• Keep control inside class
+If accessed directly:
+• Anyone can change balance
+• No validation
+• Security issues
+Q4️. What is the difference between:except, else, finally. When is each executed?
+=>except runs=>When error occurs
+  else	runs=>When NO error
+  finally	runs=>Always (cleanup)
+Q5️. What is the difference between:"w" mode,"a" mode,"r" mode.When would you use each?
+=>• "r" → read data
+  • "w" → create new / overwrite
+  • "a" → add without deleting
 
+_____________________
+Q1. What does `count_frequency` do?
+Creates a dictionary that stores each number and its frequency  
+(i.e., how many times it appears in the list).
+Q2. Why is `if item in freq` needed?
+Because `freq[item] += 1` only works if the key already exists.  
+If not, Python raises a `KeyError`.  
+So we check first to:
+- Increment if exists
+- Initialize to 1 if not
+Q3. What breaks if we remove the `if`?
+On first occurrence of any item,python tries:
+freq[item] += 1
+Key doesn’t exist → KeyError → program crashes.
 q4.One mistake you might make if writing it again
 =>getting confused between freq[item] or item[freq]
-
 q5.def add(a,b):
      return a+b
 _____________________
@@ -87,3 +122,4 @@ data = response.json()
 Q5. What’s the difference between a SQL JOIN and filtering with WHERE?
 =>WHERE is used to:Filter rows inside same table
   JOIN is used to Combine multiple tables based on common column
+_____________________
