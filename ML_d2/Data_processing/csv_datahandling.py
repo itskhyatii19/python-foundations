@@ -1,195 +1,98 @@
-import pandas as pd
-import requests
-from io import StringIO
-
-
 """
 File: csv_datahandling.py
-Purpose: Demonstrates advanced pandas read_csv parameters
+Purpose: Advanced CSV handling for real ML projects
 Author: Khyati Sharma
 """
 
-
-def load_local_csv():
-    """Load CSV from local path and perform EDA"""
-    df_local = pd.read_csv("StudentPerformance.csv")
-
-    print("\nLocal CSV Info")
-    print("Shape:", df_local.shape)
-    print(df_local.head())
-    print(df_local.info())
-    print(df_local.describe())
-    print("Missing values:\n", df_local.isnull().sum())
+import pandas as pd
 
 
-def load_csv_from_url():
-    """Load CSV from URL with custom headers"""
-    url = "https://raw.githubusercontent.com/cs109/2014_data/master/countries.csv"
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
-
-    response = requests.get(url, headers=headers)
-    data = StringIO(response.text)
-
-    df_url = pd.read_csv(data)
-
-    print("\nURL CSV Info")
-    print(df_url.info())
-    print("Shape:", df_url.shape)
-    print(df_url.describe())
-    print("Missing values:\n", df_url.isnull().sum())
+# Load dataset
+def load_data(path):
+    """Load CSV file"""
+    df = pd.read_csv(path)
+    print("\nDataset loaded successfully")
+    return df
 
 
-def load_tsv_file():
-    """Load TSV file with custom column names"""
-    df_movies = pd.read_csv(
-        'movie_titles_metadata.tsv',
-        sep='\t',
-        names=['sno', 'name', 'release_year', 'rating', 'votes', 'genres']
-    )
-
-    print("\nTSV Dataset Info")
-    print(df_movies.info())
-    print("Shape:", df_movies.shape)
-    print(df_movies.describe())
-    print("Missing values:\n", df_movies.isnull().sum())
+# Basic exploration
+def explore_data(df):
+    print("\nShape:", df.shape)
+    print("\nColumns:", df.columns)
+    print("\nInfo:")
+    print(df.info())
+    print("\nSummary:")
+    print(df.describe())
 
 
-def index_and_header_handling():
-    """Demonstrate index_col & header parameters"""
-    df_train = pd.read_csv('aug_train.csv', index_col='enrollee_id')
+# Handle missing values
+def handle_missing(df):
+    """
+    Fill or drop missing values
+    """
+    print("\nMissing values before:")
+    print(df.isnull().sum())
 
-    df_test = pd.read_csv("test.csv", header=1)
-    print("\nHeader Handling")
-    print(df_test.info())
+    df = df.fillna("Unknown")   # simple strategy
+    print("\nMissing values after:")
+    print(df.isnull().sum())
 
-
-def column_selection():
-    """Read specific columns"""
-    df_cols = pd.read_csv(
-        'aug_train.csv',
-        usecols=['enrollee_id', 'gender', 'education_level']
-    )
-    print("\nSelected Columns")
-    print(df_cols.head())
+    return df
 
 
-def handle_na_values():
-    """Custom missing value handling"""
-    df_na = pd.read_csv(
-        'aug_train.csv',
-        na_values=['NA', 'N/A', 'missing']
-    )
+# Remove duplicates
+def remove_duplicates(df):
+    before = df.shape[0]
+    df = df.drop_duplicates()
+    after = df.shape[0]
 
-    print("\nMissing values after custom NA handling")
-    print(df_na.isnull().sum())
-
-
-def convert_to_series():
-    """Convert single column dataframe to series"""
-    df_series = pd.read_csv(
-        "aug_train.csv",
-        usecols=["enrollee_id"]
-    )["enrollee_id"]
-
-    print("\nSeries Type:", type(df_series))
+    print(f"\nDuplicates removed: {before-after}")
+    return df
 
 
-def skip_and_limit_rows():
-    """Skip rows and read limited rows"""
-    df_skip = pd.read_csv('aug_train.csv', skiprows=2)
-    print("\nAfter skipping rows:", df_skip.shape)
-
-    df_nrows = pd.read_csv('aug_train.csv', nrows=5)
-    print("\nFirst 5 rows:\n", df_nrows)
-
-
-def enforce_dtypes():
-    """Specify column datatypes"""
-    df_dtype = pd.read_csv(
-        'aug_train.csv',
-        dtype={
-            'enrollee_id': str,
-            'city_development_index': float,
-            'target': int
-        }
-    )
-
-    print("\nData types enforced")
-    print(df_dtype.dtypes)
+# Text cleaning (important for your project)
+def clean_text_column(df, col):
+    """
+    Lowercase + remove extra spaces
+    """
+    df[col] = df[col].str.lower().str.strip()
+    return df
 
 
-def encoding_example():
-    """Read CSV with encoding"""
-    pd.read_csv('aug_train.csv', encoding='utf-8')
+# Feature engineering
+def create_feature(df):
+    """
+    Combine multiple columns into one
+    (for ML vectorization later)
+    """
+    if "skills" in df.columns and "role" in df.columns:
+        df["combined_text"] = df["skills"] + " " + df["role"]
+        print("\nNew feature: combined_text created")
+
+    return df
 
 
-def handle_bad_lines():
-    """Skip corrupt rows"""
-    df_bad = pd.read_csv(
-        'aug_train.csv',
-        on_bad_lines='skip'
-    )
-    print("\nAfter skipping bad lines:", df_bad.shape)
-
-
-def parse_dates_example():
-    """Parse date columns"""
-    df_dates = pd.read_csv(
-        'IPL Matches 2008-2020.csv',
-        parse_dates=['date']
-    )
-    print("\nDate parsing successful")
-
-
-def converters_example():
-    """Apply custom conversion using converters"""
-
-    def rename(team):
-        return "RCB" if team == "Royal Challengers Bangalore" else team
-
-    df_convert = pd.read_csv(
-        'IPL Matches 2008-2020.csv',
-        converters={'team1': rename}
-    )
-
-    print("\nTeam rename applied")
-
-
-def low_memory_example():
-    """Handle mixed datatypes"""
-    pd.read_csv("file.csv", low_memory=False)
-
-
-def chunk_processing():
-    """Read large file in chunks"""
-    chunks = pd.read_csv(
-        'aug_train.csv',
-        chunksize=8000
-    )
-
-    print("\nChunk shapes:")
-    for chunk in chunks:
-        print(chunk.shape)
+# Export cleaned data
+def save_clean_data(df):
+    df.to_csv("cleaned_data.csv", index=False)
+    print("\nCleaned dataset saved!")
 
 
 def main():
-    load_local_csv()
-    load_csv_from_url()
-    load_tsv_file()
-    index_and_header_handling()
-    column_selection()
-    handle_na_values()
-    convert_to_series()
-    skip_and_limit_rows()
-    enforce_dtypes()
-    encoding_example()
-    handle_bad_lines()
-    parse_dates_example()
-    converters_example()
-    low_memory_example()
-    chunk_processing()
+    df = load_data("jobs.csv")   # replace with your real dataset
+
+    explore_data(df)
+
+    df = handle_missing(df)
+    df = remove_duplicates(df)
+
+    # Clean text columns
+    if "skills" in df.columns:
+        df = clean_text_column(df, "skills")
+
+    df = create_feature(df)
+
+    save_clean_data(df)
 
 
 if __name__ == "__main__":
