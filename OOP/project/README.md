@@ -182,35 +182,5 @@ Khyati Sharma
 🎓 B.Tech AI Student
 💻 Backend & ML Enthusiast
 
-🚀 Future Enhancements
 
-📧 Email verification
-
-🔑 Password reset system
-
-🧪 Unit testing
-
-📜 Swagger API documentation
-
-🐳 Docker deployment
-
-☁ Cloud hosting
-
-⭐ Support
-
-If you liked this project, give it a ⭐ star
-It motivates me to build more!
-
-
----
-
-### 🔥 Now your README has:
-✔ **Bold text**  
-✔ Proper **headings**  
-✔ Tables  
-✔ Code blocks  
-✔ Clean spacing  
-✔ GitHub-friendly layout  
-
----
 
